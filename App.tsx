@@ -1,45 +1,45 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { useState } from 'react';
+import { Alert, Button, StyleSheet, TextInput} from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+function downloadURL(url: string) {
+  Alert.alert("downloading " + url);
+}
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
+export default function App() {
+  const [url, onChangeURL] = useState('');
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+    <SafeAreaProvider style={styles.provider}>
+      <SafeAreaView>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeURL}
+          placeholder='Enter any valid YouTube URL.'
+          value={url}
+        />
+        <Button
+          title="Download"
+          onPress={() => downloadURL(url)}
+        />
+      </SafeAreaView>
     </SafeAreaProvider>
+    
   );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  provider: {
+    justifyContent:'center',
+    alignItems:'center'
   },
-});
+  input: {
+    height:40,
+    width:200,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  submit: {
 
-export default App;
+  }
+})
