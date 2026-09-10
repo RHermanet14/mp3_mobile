@@ -2,8 +2,12 @@
 import {useState} from "react"
 export default function Home() {
   const [url, setURL] = useState("");
-  const downloadURL = () => {
+  const downloadURL = async() => {
     if(url === "") return;
+    await fetch("/api/url", {
+      method: "POST",
+      body: JSON.stringify({url: url})
+    });
   }
   return (
     <div>
