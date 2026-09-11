@@ -4,10 +4,17 @@ export default function Home() {
   const [url, setURL] = useState("");
   const downloadURL = async() => {
     if(url === "") return;
-    await fetch("/api/url", {
+    const res = await fetch('http://localhost:8000/url', {
       method: "POST",
-      body: JSON.stringify({url: url})
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url: url
+      }),
     });
+    const data = await res.json();
+    alert(data.url);
   }
   return (
     <div>
