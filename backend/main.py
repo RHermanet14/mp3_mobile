@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import yt_dlp
 app = FastAPI()
 
 app.add_middleware(
@@ -18,8 +19,16 @@ class UrlRequest(BaseModel):
 def root():
     return {"message":"The backend is functional"}
 @app.post("/url")
-def get_url(data: dict):
-    url = data["url"]
+def get_url(request: UrlRequest):
+    ydl_opts = {
+        "quiet": True,
+        "skip_download": True,
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(request.url, download=false)
+
     return {
-        "url": url,
+        "title": info.get("title"),
+        "thumbnail": info.get("thumbnail"),
+        "duration":info.get("duration"),
     }
