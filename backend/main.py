@@ -25,7 +25,7 @@ def get_url(request: UrlRequest):
         "skip_download": True,
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(request.url, download=false)
+        info = ydl.extract_info(request.url, download=False)
 
     return {
         "title": info.get("title"),

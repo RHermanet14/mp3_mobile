@@ -14,18 +14,21 @@ export default function Home() {
       }),
     });
     const data = await res.json();
-    alert(data.url);
+    alert("Title: " + data.title + "\nThumbnail: " + data.thumbnail + "\nDuration: " + data.duration);
   }
   return (
-    <div>
+    <div className="flex items-center justify-center flex-col h-screen gap-10">
+      <p className="">
+        MP3 Downloader
+      </p>
       <input
         value={url}
         onChange={(e) => setURL(e.target.value)}
         placeholder="Enter valid mp3 URL."
-        className=""
+        className="w-fit"
       />
       <button onClick={downloadURL}
-        className=""
+        className="bg-gray-800 rounded p-5"
       >
         Download
       </button>
