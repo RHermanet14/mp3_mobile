@@ -18,6 +18,23 @@ class UrlRequest(BaseModel):
 @app.get("/")
 def root():
     return {"message":"The backend is functional"}
+@app.post("/download")
+def download_mp3(request: UrlRequest):
+    ydl_opts = {
+            "format": "bestaudio/best",
+            "outtmpl": "downloads/%(title)s%(ext)s",
+            "postprocessors": [
+                {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": "192",
+                }
+            ]
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([request.url])
+    return {"message": "Download complete"}
+
 @app.post("/url")
 def get_url(request: UrlRequest):
     ydl_opts = {
