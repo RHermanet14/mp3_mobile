@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from pathlib import Path
+from fastapi.responses import FileResponse
 import yt_dlp
 app = FastAPI()
 
@@ -32,8 +34,15 @@ def download_mp3(request: UrlRequest):
             ]
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([request.url])
-    return {"message": "Download complete"}
+        info = ydl.extract_info(request.url,download = True)
+    original_file = Path(ydl.prepare_filename(info))
+    mp3_file = original_file.with_suffix(".mp3")
+
+    return FileResponse(
+        path = mp3_file,
+        media_type = "audio/mpeg",
+        filename = mp3_file.name
+    )
 
 @app.post("/url")
 def get_url(request: UrlRequest):
