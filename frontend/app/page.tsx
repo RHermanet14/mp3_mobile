@@ -4,7 +4,7 @@ export default function Home() {
   const [url, setURL] = useState("");
   const downloadURL = async() => {
     if(url === "") return;
-    const res = await fetch('http://localhost:8000/url', {
+    const res = await fetch('http://localhost:8000/download', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -13,8 +13,18 @@ export default function Home() {
         url: url
       }),
     });
-    const data = await res.json();
-    alert("Title: " + data.title + "\nThumbnail: " + data.thumbnail + "\nDuration: " + data.duration);
+    if (!res.ok) {
+      throw new Error("Download failed");
+    }
+
+    const blob = await res.blob();
+    const downloadURL = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = downloadURL;
+    link.download = "audio.mp3";
+    link.click();
+    URL.revokeObjectURL(downloadURL);
   }
   return (
     <div className="flex items-center justify-center flex-col h-screen gap-10">
